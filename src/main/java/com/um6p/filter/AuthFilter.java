@@ -1,5 +1,8 @@
 package com.um6p.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +12,11 @@ import java.io.IOException;
 
 @WebFilter("/*")
 public class AuthFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("Authentication Filter initialized");
+        logger.info("Authentication Filter initialized");
     }
 
     @Override
@@ -55,8 +59,8 @@ public class AuthFilter implements Filter {
                 chain.doFilter(request, response);
             } else {
                 // Log unauthorized access attempt
-                System.err.println("Unauthorized access attempt by user " +
-                        session.getAttribute("userName") + " to: " + uri);
+                logger.warn("Unauthorized access attempt by user {} to: {}",
+                        session.getAttribute("userName"), uri);
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
             }
         } else if (isPublicPage) {
@@ -65,8 +69,8 @@ public class AuthFilter implements Filter {
         } else {
             // User is not logged in and trying to access protected page
             // Log unauthorized access attempt
-            System.err.println("Unauthenticated access attempt to: " + uri +
-                    " from IP: " + httpRequest.getRemoteAddr());
+            logger.warn("Unauthenticated access attempt to: {} from IP: {}",
+                    uri, httpRequest.getRemoteAddr());
             httpResponse.sendRedirect(contextPath + "/login.jsp?error=login_required");
         }
     }
@@ -125,14 +129,41 @@ public class AuthFilter implements Filter {
     }
 
     private void addSecurityHeaders(HttpServletResponse response) {
+        // Prevent MIME type sniffing
         response.setHeader("X-Content-Type-Options", "nosniff");
+
+        // Prevent clickjacking
         response.setHeader("X-Frame-Options", "DENY");
+
+        // Enable XSS protection in browsers
         response.setHeader("X-XSS-Protection", "1; mode=block");
-        response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+
+        // Content Security Policy - restrictive policy
+        response.setHeader("Content-Security-Policy",
+                "default-src 'self'; " +
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+                "style-src 'self' 'unsafe-inline'; " +
+                "img-src 'self' data: https:; " +
+                "font-src 'self'; " +
+                "connect-src 'self'; " +
+                "frame-ancestors 'none'; " +
+                "base-uri 'self'; " +
+                "form-action 'self'");
+
+        // Referrer Policy
+        response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+
+        // Permissions Policy (formerly Feature Policy)
+        response.setHeader("Permissions-Policy",
+                "geolocation=(), microphone=(), camera=(), payment=()");
+
+        // Only add HSTS if running over HTTPS
+        // In development, this is typically disabled
+        // response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
     }
 
     @Override
     public void destroy() {
-        System.out.println("Authentication Filter destroyed");
+        logger.info("Authentication Filter destroyed");
     }
 }

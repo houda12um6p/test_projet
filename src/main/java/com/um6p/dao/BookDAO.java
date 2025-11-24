@@ -109,15 +109,19 @@ public class BookDAO {
         String sql = "SELECT * FROM " + BOOKS_TABLE;
 
         if (!includeAllStatus) {
-            sql += " WHERE status = '" + STATUS_AVAILABLE + "'";
+            sql += " WHERE status = ?";
         }
 
         sql += " ORDER BY title ASC";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            if (!includeAllStatus) {
+                stmt.setString(1, STATUS_AVAILABLE);
+            }
+
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 books.add(mapResultSetToBook(rs));
             }
@@ -213,15 +217,63 @@ public class BookDAO {
         }
     }
 
-    public boolean decrementAvailableCopies(int bookId) {
-        String sql = "UPDATE " + BOOKS_TABLE + " SET available_copies = available_copies - 1 WHERE id = ? AND available_copies > 0";
+    /**
+     * Atomically decrement available copies using a transaction with row locking
+     * This prevents race conditions when multiple users try to borrow the same book
+     */
+    public boolean decrementAvailableCopiesAtomic(int bookId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement checkStmt = null;
+        PreparedStatement updateStmt = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try {
+            conn = DatabaseConnection.getConnection();
+            conn.setAutoCommit(false);
 
-            stmt.setInt(1, bookId);
-            int rowsUpdated = stmt.executeUpdate();
+            // Lock the row for update
+            String checkSql = "SELECT available_copies FROM " + BOOKS_TABLE +
+                            " WHERE id = ? FOR UPDATE";
+            checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setInt(1, bookId);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (!rs.next() || rs.getInt("available_copies") <= 0) {
+                conn.rollback();
+                return false;
+            }
+
+            // Decrement the count
+            String updateSql = "UPDATE " + BOOKS_TABLE +
+                             " SET available_copies = available_copies - 1 WHERE id = ?";
+            updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setInt(1, bookId);
+            int rowsUpdated = updateStmt.executeUpdate();
+
+            conn.commit();
             return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.err.println("Error rolling back transaction: " + rollbackEx.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (checkStmt != null) checkStmt.close();
+            if (updateStmt != null) updateStmt.close();
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
+
+    public boolean decrementAvailableCopies(int bookId) {
+        try {
+            return decrementAvailableCopiesAtomic(bookId);
         } catch (SQLException e) {
             System.err.println("Error decrementing copies for book ID " + bookId + ": " + e.getMessage());
             return false;

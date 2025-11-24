@@ -3,8 +3,11 @@ package com.um6p.controller;
 import com.um6p.dao.BookDAO;
 import com.um6p.dao.BorrowingDAO;
 import com.um6p.model.User;
-import com.um6p.model.Borrowing; // ADD THIS IMPORT
-import com.um6p.model.Borrowing.BorrowingStatus; // ADD THIS IMPORT
+import com.um6p.model.Borrowing;
+import com.um6p.model.Borrowing.BorrowingStatus;
+import com.um6p.util.AppConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet("/borrowings/*")
 public class BorrowingController extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(BorrowingController.class);
 
     private BorrowingDAO borrowingDAO;
     private BookDAO bookDAO;
-    private static final int MAX_BORROWING_LIMIT = 5; // Maximum books a user can borrow
-    private static final int BORROWING_PERIOD_DAYS = 14; // Default borrowing period
 
     @Override
     public void init() throws ServletException {
@@ -173,8 +174,11 @@ public class BorrowingController extends HttpServlet {
 
         // Check if user has reached borrowing limit
         int currentBorrowings = borrowingDAO.getActiveBorrowingsCount(user.getId());
-        if (currentBorrowings >= MAX_BORROWING_LIMIT) {
-            request.setAttribute("error", "You have reached the maximum borrowing limit of " + MAX_BORROWING_LIMIT + " books.");
+        if (currentBorrowings >= AppConstants.MAX_BORROWING_LIMIT) {
+            logger.warn("User {} attempted to borrow book {} but has reached the limit of {} books",
+                    user.getId(), bookId, AppConstants.MAX_BORROWING_LIMIT);
+            request.setAttribute("error", "You have reached the maximum borrowing limit of " +
+                    AppConstants.MAX_BORROWING_LIMIT + " books.");
             response.sendRedirect(request.getContextPath() + "/books/view/" + bookId + "?error=limit");
             return;
         }
@@ -194,8 +198,8 @@ public class BorrowingController extends HttpServlet {
         }
 
         // Calculate due date
-        LocalDateTime borrowDate = LocalDateTime.now(); // CHANGED: LocalDate to LocalDateTime
-        LocalDateTime dueDate = borrowDate.plusDays(BORROWING_PERIOD_DAYS); // CHANGED: LocalDate to LocalDateTime
+        LocalDateTime borrowDate = LocalDateTime.now();
+        LocalDateTime dueDate = borrowDate.plusDays(AppConstants.BORROWING_PERIOD_DAYS);
 
         // Create borrowing record
         Borrowing borrowing = new Borrowing();
@@ -208,10 +212,17 @@ public class BorrowingController extends HttpServlet {
         boolean borrowingCreated = borrowingDAO.createBorrowing(borrowing);
 
         if (borrowingCreated) {
-            // Decrement available copies
-            bookDAO.decrementAvailableCopies(bookId);
-            response.sendRedirect(request.getContextPath() + "/borrowings/active?success=Book borrowed successfully");
+            // Decrement available copies atomically
+            if (bookDAO.decrementAvailableCopies(bookId)) {
+                logger.info("User {} successfully borrowed book {}", user.getId(), bookId);
+                response.sendRedirect(request.getContextPath() + "/borrowings/active?success=Book borrowed successfully");
+            } else {
+                logger.error("Failed to decrement book copies after creating borrowing record");
+                request.setAttribute("error", "Failed to complete borrowing transaction. Please try again.");
+                response.sendRedirect(request.getContextPath() + "/books/view/" + bookId + "?error=failed");
+            }
         } else {
+            logger.error("Failed to create borrowing record for user {} and book {}", user.getId(), bookId);
             request.setAttribute("error", "Failed to borrow book. Please try again.");
             response.sendRedirect(request.getContextPath() + "/books/view/" + bookId + "?error=failed");
         }

@@ -29,7 +29,7 @@ public class LoginController extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             // User already logged in, redirect to appropriate dashboard
             User user = (User) session.getAttribute("user");
-            if ("staff".equals(user.getRole())) {
+            if (user.getRole().name().equalsIgnoreCase("STAFF")) {
                 response.sendRedirect(request.getContextPath() + "/staff/dashboard.jsp");
             } else {
                 response.sendRedirect(request.getContextPath() + "/student/dashboard.jsp");
@@ -81,16 +81,20 @@ public class LoginController extends HttpServlet {
         User user = userDAO.validateLogin(email, password);
 
         if (user != null) {
-            // Login successful - create session
+            // Login successful - invalidate old session and create new one (prevents session fixation)
+            session.invalidate();
+            session = request.getSession(true); // Create new session
+
+            // Set session attributes
             session.setAttribute("user", user);
             session.setAttribute("userId", user.getId());
-            session.setAttribute("userRole", user.getRole());
+            session.setAttribute("userRole", user.getRole().name().toLowerCase());
             session.setAttribute("userName", user.getName());
             session.setAttribute("loginAttempts", 0); // Reset attempts
             session.setMaxInactiveInterval(30 * 60); // 30 minutes session timeout
 
             // Redirect based on role
-            if ("staff".equals(user.getRole())) {
+            if (user.getRole().name().equalsIgnoreCase("STAFF")) {
                 response.sendRedirect(request.getContextPath() + "/staff/dashboard.jsp");
             } else {
                 response.sendRedirect(request.getContextPath() + "/student/dashboard.jsp");
