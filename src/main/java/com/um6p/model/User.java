@@ -13,7 +13,7 @@ public class User {
     private LocalDateTime lastLogin;
 
     public enum UserRole {
-        STUDENT, STAFF, ADMIN
+        STUDENT, STAFF, ADMIN, LIBRARIAN, ADMINISTRATOR, SYSTEM_ADMIN
     }
 
     // Constructors
@@ -129,6 +129,34 @@ public class User {
 
     public void updateLastLogin() {
         this.lastLogin = LocalDateTime.now();
+    }
+
+    public boolean isLibrarian() {
+        return role == UserRole.LIBRARIAN;
+    }
+
+    public boolean isAdministrator() {
+        return role == UserRole.ADMINISTRATOR;
+    }
+
+    public boolean isSystemAdmin() {
+        return role == UserRole.SYSTEM_ADMIN;
+    }
+
+    public boolean canManageBooks() {
+        return role == UserRole.LIBRARIAN || role == UserRole.ADMINISTRATOR || role == UserRole.SYSTEM_ADMIN;
+    }
+
+    public boolean canManageEvents() {
+        return role == UserRole.ADMINISTRATOR || role == UserRole.SYSTEM_ADMIN;
+    }
+
+    public boolean canManageUsers() {
+        return role == UserRole.SYSTEM_ADMIN;
+    }
+
+    public boolean canViewReports() {
+        return role == UserRole.LIBRARIAN || role == UserRole.ADMINISTRATOR || role == UserRole.SYSTEM_ADMIN;
     }
 
     @Override

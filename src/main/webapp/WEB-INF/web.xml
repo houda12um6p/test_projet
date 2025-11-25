@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+
+    <!-- Display Name -->
+    <display-name>UM6P Learning Center Management System</display-name>
+
+    <!-- Database Resource Reference -->
+    <resource-ref>
+        <description>UM6P Learning Center Database</description>
+        <res-ref-name>jdbc/um6p_learning_center</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+
+    <!-- Welcome Files -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>home.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- Session Configuration -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure>
+        </cookie-config>
+    </session-config>
+
+    <!-- ===== SERVLETS CONFIGURATION ===== -->
+    <!-- All servlets are configured using @WebServlet annotations in the controller classes -->
+
+    <!-- ===== FILTERS CONFIGURATION ===== -->
+
+    <!-- Authentication Filter -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.um6p.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/books/*</url-pattern>
+        <url-pattern>/events/*</url-pattern>
+        <url-pattern>/borrowings/*</url-pattern>
+        <url-pattern>/profile</url-pattern>
+        <url-pattern>/dashboard</url-pattern>
+    </filter-mapping>
+
+    <!-- Role-Based Access Filter -->
+    <filter>
+        <filter-name>RoleFilter</filter-name>
+        <filter-class>com.um6p.filter.RoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RoleFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
+    <!-- ===== ERROR PAGES ===== -->
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.html</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error/500.html</location>
+    </error-page>
+
+</web-app>
