@@ -9,228 +9,170 @@
 
 <div class="container">
     <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-4"><i class="fas fa-book-reader me-3"></i>My Borrowings</h1>
-            <p class="lead text-muted">Track your borrowed books and borrowing history</p>
-        </div>
+    <div class="mb-8">
+        <h1 style="font-size: 40px; font-weight: 800; color: var(--gray-900); margin-bottom: var(--space-3);">
+            <i class="fas fa-book-reader" style="margin-right: var(--space-3); color: var(--orange-primary);"></i>
+            My Borrowings
+        </h1>
+        <p style="font-size: 18px; color: var(--gray-600);">Track your borrowed books and borrowing history</p>
     </div>
 
     <!-- Filter Tabs -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="btn-group">
-                <a href="${pageContext.request.contextPath}/borrowings" class="btn btn-outline-primary">
-                    <i class="fas fa-list me-2"></i>All Borrowings
-                </a>
-                <a href="${pageContext.request.contextPath}/borrowings/active" class="btn btn-outline-success">
-                    <i class="fas fa-book-reader me-2"></i>Active
-                </a>
-                <a href="${pageContext.request.contextPath}/borrowings/history" class="btn btn-outline-secondary">
-                    <i class="fas fa-history me-2"></i>History
-                </a>
-                <c:if test="${sessionScope.user.role == 'STAFF'}">
-                    <a href="${pageContext.request.contextPath}/borrowings/overdue" class="btn btn-outline-danger">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Overdue
-                    </a>
-                    <a href="${pageContext.request.contextPath}/borrowings/all" class="btn btn-outline-info">
-                        <i class="fas fa-globe me-2"></i>All Users
-                    </a>
-                </c:if>
-            </div>
-        </div>
+    <div style="display: flex; gap: var(--space-2); margin-bottom: var(--space-8); flex-wrap: wrap;">
+        <a href="${pageContext.request.contextPath}/borrowings" class="btn btn-outline-primary">
+            <i class="fas fa-list"></i> All Borrowings
+        </a>
+        <a href="${pageContext.request.contextPath}/borrowings/active" class="btn btn-outline-primary">
+            <i class="fas fa-book-reader"></i> Active
+        </a>
+        <a href="${pageContext.request.contextPath}/borrowings/history" class="btn btn-outline-primary">
+            <i class="fas fa-history"></i> History
+        </a>
+        <c:if test="${sessionScope.user.role == 'STAFF'}">
+            <a href="${pageContext.request.contextPath}/borrowings/overdue" class="btn btn-danger">
+                <i class="fas fa-exclamation-triangle"></i> Overdue
+            </a>
+            <a href="${pageContext.request.contextPath}/borrowings/all" class="btn btn-outline-primary">
+                <i class="fas fa-globe"></i> All Users
+            </a>
+        </c:if>
     </div>
 
     <c:if test="${not empty success}">
-        <div class="alert alert-success alert-dismissible fade show">
-            <i class="fas fa-check-circle me-2"></i>${success}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>${success}</span>
         </div>
     </c:if>
 
     <c:if test="${not empty error}">
-        <div class="alert alert-danger alert-dismissible fade show">
-            <i class="fas fa-exclamation-circle me-2"></i>${error}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${error}</span>
         </div>
     </c:if>
 
     <!-- Summary Cards -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-book-reader fa-3x text-primary mb-3"></i>
-                    <h3 class="mb-0">${not empty borrowings ? borrowings.size() : 0}</h3>
-                    <small class="text-muted">Total Borrowings</small>
-                </div>
+    <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="card">
+            <div class="card-body" style="text-align: center; padding: var(--space-6);">
+                <i class="fas fa-book-reader" style="font-size: 48px; color: var(--orange-primary); margin-bottom: var(--space-3); display: block;"></i>
+                <h3 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">${not empty borrowings ? borrowings.size() : 0}</h3>
+                <small style="color: var(--gray-600);">Total Borrowings</small>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                    <h3 class="mb-0">0</h3>
-                    <small class="text-muted">Active Loans</small>
-                </div>
+        <div class="card">
+            <div class="card-body" style="text-align: center; padding: var(--space-6);">
+                <i class="fas fa-check-circle" style="font-size: 48px; color: var(--success); margin-bottom: var(--space-3); display: block;"></i>
+                <h3 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h3>
+                <small style="color: var(--gray-600);">Active Loans</small>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-undo fa-3x text-info mb-3"></i>
-                    <h3 class="mb-0">0</h3>
-                    <small class="text-muted">Returned</small>
-                </div>
+        <div class="card">
+            <div class="card-body" style="text-align: center; padding: var(--space-6);">
+                <i class="fas fa-undo" style="font-size: 48px; color: var(--info); margin-bottom: var(--space-3); display: block;"></i>
+                <h3 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h3>
+                <small style="color: var(--gray-600);">Returned</small>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
-                    <h3 class="mb-0">0</h3>
-                    <small class="text-muted">Overdue</small>
-                </div>
+        <div class="card">
+            <div class="card-body" style="text-align: center; padding: var(--space-6);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--error); margin-bottom: var(--space-3); display: block;"></i>
+                <h3 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h3>
+                <small style="color: var(--gray-600);">Overdue</small>
             </div>
         </div>
     </div>
 
-    <!-- Borrowings List -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>Borrowing Records</h5>
-                </div>
-                <div class="card-body p-0">
-                    <c:choose>
-                        <c:when test="${not empty borrowings}">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Book Title</th>
-                                            <th>Author</th>
-                                            <th>Borrow Date</th>
-                                            <th>Due Date</th>
-                                            <th>Return Date</th>
-                                            <th>Status</th>
-                                            <th>Fine</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="borrowing" items="${borrowings}">
-                                            <tr>
-                                                <td>
-                                                    <strong>${borrowing.book.title}</strong>
-                                                </td>
-                                                <td>${borrowing.book.author}</td>
-                                                <td>
-                                                    <fmt:formatDate value="${borrowing.borrowDate}"
-                                                                  pattern="yyyy-MM-dd" />
-                                                </td>
-                                                <td>
-                                                    <fmt:formatDate value="${borrowing.dueDate}"
-                                                                  pattern="yyyy-MM-dd" />
-                                                </td>
-                                                <td>
-                                                    <c:choose>
-                                                        <c:when test="${borrowing.returnDate != null}">
-                                                            <fmt:formatDate value="${borrowing.returnDate}"
-                                                                          pattern="yyyy-MM-dd" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="text-muted">Not returned</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </td>
-                                                <td>
-                                                    <c:choose>
-                                                        <c:when test="${borrowing.status == 'BORROWED'}">
-                                                            <span class="badge bg-success">Borrowed</span>
-                                                        </c:when>
-                                                        <c:when test="${borrowing.status == 'RETURNED'}">
-                                                            <span class="badge bg-secondary">Returned</span>
-                                                        </c:when>
-                                                        <c:when test="${borrowing.status == 'OVERDUE'}">
-                                                            <span class="badge bg-danger">Overdue</span>
-                                                        </c:when>
-                                                    </c:choose>
-                                                </td>
-                                                <td>
-                                                    <c:choose>
-                                                        <c:when test="${borrowing.fineAmount > 0}">
-                                                            <span class="text-danger fw-bold">
-                                                                ${borrowing.fineAmount} MAD
-                                                            </span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="text-success">0 MAD</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </td>
-                                                <td>
-                                                    <c:if test="${borrowing.status == 'BORROWED' || borrowing.status == 'OVERDUE'}">
-                                                        <form action="${pageContext.request.contextPath}/borrowings/return/${borrowing.id}"
-                                                              method="post" class="d-inline"
-                                                              onsubmit="return confirm('Are you sure you want to return this book?');">
-                                                            <button type="submit" class="btn btn-sm btn-primary">
-                                                                <i class="fas fa-undo me-1"></i>Return
-                                                            </button>
-                                                        </form>
-                                                    </c:if>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="text-center py-5">
-                                <i class="fas fa-inbox fa-4x text-muted mb-3 d-block"></i>
-                                <h4 class="text-muted">No borrowing records found</h4>
-                                <p class="text-muted">You haven't borrowed any books yet</p>
-                                <a href="${pageContext.request.contextPath}/books" class="btn btn-primary">
-                                    <i class="fas fa-search me-2"></i>Browse Books
-                                </a>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
+    <!-- Borrowings Table -->
+    <div class="card">
+        <div class="card-header">
+            <h2 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin: 0;">
+                <i class="fas fa-list" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                Borrowing History
+            </h2>
         </div>
-    </div>
-
-    <!-- Borrowing Policy Info -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm bg-light">
-                <div class="card-body">
-                    <h6 class="mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>Borrowing Policy</h6>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p class="mb-2">
-                                <i class="fas fa-check text-success me-2"></i>
-                                <strong>Maximum Books:</strong> 5 books at a time
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="mb-2">
-                                <i class="fas fa-calendar text-primary me-2"></i>
-                                <strong>Borrowing Period:</strong> 14 days
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="mb-2">
-                                <i class="fas fa-money-bill text-danger me-2"></i>
-                                <strong>Late Fee:</strong> 5 MAD per day
-                            </p>
-                        </div>
+        <div class="card-body" style="padding: 0;">
+            <c:choose>
+                <c:when test="${not empty borrowings}">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Book Title</th>
+                                    <th>Borrow Date</th>
+                                    <th>Due Date</th>
+                                    <th>Return Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="borrowing" items="${borrowings}">
+                                    <tr>
+                                        <td style="font-weight: 600; color: var(--gray-900);">${borrowing.bookTitle}</td>
+                                        <td><fmt:formatDate value="${borrowing.borrowDate}" pattern="MMM dd, yyyy" /></td>
+                                        <td><fmt:formatDate value="${borrowing.dueDate}" pattern="MMM dd, yyyy" /></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty borrowing.returnDate}">
+                                                    <fmt:formatDate value="${borrowing.returnDate}" pattern="MMM dd, yyyy" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="color: var(--gray-500);">Not returned</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${borrowing.status == 'active'}">
+                                                    <span class="badge badge-success">Active</span>
+                                                </c:when>
+                                                <c:when test="${borrowing.status == 'returned'}">
+                                                    <span class="badge badge-gray">Returned</span>
+                                                </c:when>
+                                                <c:when test="${borrowing.status == 'overdue'}">
+                                                    <span class="badge badge-danger">Overdue</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge badge-gray">${borrowing.status}</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <c:if test="${borrowing.status == 'active' || borrowing.status == 'overdue'}">
+                                                <form action="${pageContext.request.contextPath}/borrowings/return" method="post" style="display: inline;">
+                                                    <input type="hidden" name="borrowingId" value="${borrowing.id}">
+                                                    <button type="submit" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-undo"></i> Return
+                                                    </button>
+                                                </form>
+                                            </c:if>
+                                            <c:if test="${borrowing.status == 'returned'}">
+                                                <span style="color: var(--success); font-size: 14px;">
+                                                    <i class="fas fa-check"></i> Completed
+                                                </span>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3 class="empty-state-title">No borrowings found</h3>
+                        <p class="empty-state-description">Start borrowing books from our library</p>
+                        <a href="${pageContext.request.contextPath}/books" class="btn btn-primary">
+                            <i class="fas fa-book"></i> Browse Books
+                        </a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </div>

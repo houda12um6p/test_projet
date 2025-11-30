@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe /c \"copy /Y C:\\Users\\wwwto\\Desktop\\um6p_learning_center\\target\\learning-center.war C:\\tomcat9\\webapps\")",
+      "Bash(cmd.exe /c \"java -version\")",
+      "Bash(cmd.exe /c \"dir C:\\tomcat9\\webapps\")",
+      "Bash(cmd.exe /c \"where java\")",
+      "Bash(cmd.exe /c \"dir /b \"\"C:\\Program Files\\Java\"\"\")",
+      "Bash(cmd.exe /c \"dir /b C:\\Progra~1\\Java\")",
+      "Bash(cmd.exe /c \"curl -L -o C:\\temp\\jdk17.zip https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_windows-x64_bin.zip\")",
+      "Bash(cmd.exe /c \"powershell -Command \"\"Expand-Archive -Path C:\\temp\\jdk17.zip -DestinationPath C:\\Progra~1\\Java -Force\"\"\")",
+      "Bash(cmd.exe /c \"dir /b C:\\Java17\")",
+      "Bash(cmd.exe /c \"C:\\Java17\\jdk-17.0.2\\bin\\java.exe -version\")",
+      "Bash(cmd.exe /c \"set JAVA_HOME=C:\\Java17\\jdk-17.0.2 && set JRE_HOME=C:\\Java17\\jdk-17.0.2 && cd C:\\tomcat9\\bin && startup.bat\")",
+      "Bash(cmd.exe /c \"set JAVA_HOME=C:\\Java17\\jdk-17.0.2 && cd C:\\tomcat9\\bin && startup.bat\")",
+      "Bash(cmd.exe /c \"dir C:\\Java17\\jdk-17.0.2\")",
+      "Bash(cmd.exe /c \"echo set JAVA_HOME=C:\\Java17\\jdk-17.0.2 > C:\\tomcat9\\bin\\setenv.bat\")",
+      "Bash(cmd.exe /c \"dir C:\\Java17\\jdk-17.0.2\\bin\\java.exe\")",
+      "Bash(cmd.exe /c \"set JAVA_HOME=C:\\Java17\\jdk-17.0.2 && C:\\Java17\\jdk-17.0.2\\bin\\java.exe -version && cd C:\\tomcat9\\bin && catalina.bat run\")",
+      "Bash(cmd.exe /c \"dir C:\\Java17\\jdk-17.0.2\\bin\\javac.exe\")",
+      "Bash(cmd.exe /c:*)",
+      "Bash(find:*)",
+      "Bash(timeout:*)",
+      "Bash(mvn clean package:*)",
+      "Bash(export JAVA_HOME=\"/mnt/c/Java17/jdk-17.0.2\":*)",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -24,7 +24,7 @@ public class LogoutController extends HttpServlet {
         }
 
         // Redirect to login page with logout message
-        response.sendRedirect(request.getContextPath() + "/login.jsp?logout=success");
+        response.sendRedirect(request.getContextPath() + "/login?logout=success");
     }
 
     @Override

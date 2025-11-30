@@ -77,7 +77,7 @@ public class ProfileController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -101,7 +101,7 @@ public class ProfileController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -189,7 +189,7 @@ public class ProfileController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -230,7 +230,7 @@ public class ProfileController extends HttpServlet {
         if (passwordChanged) {
             // Invalidate session for security - force re-login with new password
             session.invalidate();
-            response.sendRedirect(request.getContextPath() + "/login.jsp?success=Password changed successfully. Please login with your new password.");
+            response.sendRedirect(request.getContextPath() + "/login?success=Password changed successfully. Please login with your new password.");
         } else {
             request.setAttribute("error", "Failed to change password");
             request.getRequestDispatcher("/changePassword.jsp").forward(request, response);

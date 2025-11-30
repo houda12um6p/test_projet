@@ -126,7 +126,7 @@ public class RegisterController extends HttpServlet {
 
             if (roleSpecificCreated) {
                 // Registration successful - redirect to prevent form resubmission
-                response.sendRedirect(request.getContextPath() + "/login.jsp?success=Registration successful! Please log in.");
+                response.sendRedirect(request.getContextPath() + "/login?success=Registration successful! Please log in.");
             } else {
                 // Rollback user creation
                 userDAO.deleteUser(user.getId());

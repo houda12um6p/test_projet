@@ -9,10 +9,16 @@ import java.util.logging.Level;
 public class DatabaseConnection {
     private static final Logger logger = Logger.getLogger(DatabaseConnection.class.getName());
 
-    // Database configuration - UPDATE THE PASSWORD!
-    private static final String URL = "jdbc:mysql://localhost:3306/um6p_learning_center?useSSL=false&serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "your_mysql_password_here"; // REPLACE THIS!
+    // Database configuration - Using environment variables for security
+    private static final String URL = System.getenv("DB_URL") != null ?
+        System.getenv("DB_URL") :
+        "jdbc:mysql://localhost:3306/um6p_learning_center?useSSL=false&serverTimezone=UTC";
+    private static final String USERNAME = System.getenv("DB_USERNAME") != null ?
+        System.getenv("DB_USERNAME") :
+        "root";
+    private static final String PASSWORD = System.getenv("DB_PASSWORD") != null ?
+        System.getenv("DB_PASSWORD") :
+        "Informatique12@!"; // Default for development only - SET DB_PASSWORD environment variable in production!
 
     static {
         try {

@@ -2,6 +2,7 @@ C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\util\Database
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\BorrowingDAO.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\LibrarianDAO.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Borrowing.java
+C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\util\EmailService.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\controller\BookController.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Book.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\util\PasswordUtil.java
@@ -17,8 +18,10 @@ C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\controller\Re
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\StudentDAO.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Reservation.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\util\ValidationUtil.java
+C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\servlet\SetupUsersServlet.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\controller\LoginController.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Registration.java
+C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\util\GeneratePasswordHash.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\Main.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Student.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\controller\BorrowingController.java
@@ -26,8 +29,10 @@ C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\EventDAO.
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\BookDAO.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\ReservationDAO.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\filter\RoleFilter.java
+C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\util\InsertTestUsers.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\User.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Staff.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\controller\ProfileController.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\dao\StaffDAO.java
+C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\servlet\FixPasswordsServlet.java
 C:\Users\wwwto\Desktop\um6p_learning_center\src\main\java\com\um6p\model\Librarian.java

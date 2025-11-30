@@ -44,20 +44,20 @@ public class AuthFilter implements Filter {
         // Check session timeout for logged-in users
         if (isLoggedIn && isSessionExpired(session)) {
             session.invalidate();
-            httpResponse.sendRedirect(contextPath + "/login.jsp?error=session_timeout");
+            httpResponse.sendRedirect(contextPath + "/login?error=session_timeout");
             return;
         }
 
         if (isLoggedIn) {
             // User is logged in, check authorization
-            String userRole = (String) session.getAttribute("userRole");
-            if (isAuthorized(uri, userRole, contextPath)) {
+            com.um6p.model.User user = (com.um6p.model.User) session.getAttribute("user");
+            if (isAuthorized(uri, user, contextPath)) {
                 chain.doFilter(request, response);
             } else {
                 // Log unauthorized access attempt
                 System.err.println("Unauthorized access attempt by user " +
-                        session.getAttribute("userName") + " to: " + uri);
-                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+                        user.getName() + " (Role: " + user.getRole() + ") to: " + uri);
+                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied - Insufficient Permissions");
             }
         } else if (isPublicPage) {
             // Public page, allow access
@@ -67,7 +67,7 @@ public class AuthFilter implements Filter {
             // Log unauthorized access attempt
             System.err.println("Unauthenticated access attempt to: " + uri +
                     " from IP: " + httpRequest.getRemoteAddr());
-            httpResponse.sendRedirect(contextPath + "/login.jsp?error=login_required");
+            httpResponse.sendRedirect(contextPath + "/login?error=login_required");
         }
     }
 
@@ -92,19 +92,68 @@ public class AuthFilter implements Filter {
                 uri.endsWith("index.jsp") ||
                 uri.contains("/login") ||
                 uri.contains("/register") ||
+                uri.contains("/setup-users") ||
+                uri.contains("/fix-passwords") ||
                 uri.equals(contextPath + "/") ||
                 uri.equals(contextPath + "/index.jsp");
     }
 
-    private boolean isAuthorized(String uri, String userRole, String contextPath) {
-        // Staff-only areas
-        if (uri.contains("/staff/") || uri.contains("/admin/")) {
-            return "staff".equals(userRole);
+    private boolean isAuthorized(String uri, com.um6p.model.User user, String contextPath) {
+        if (user == null) return false;
+
+        // Allow access to role-specific dashboard
+        if (uri.contains("/views/admin/") && user.isAdmin()) return true;
+        if (uri.contains("/views/librarian/") && (user.isLibrarian() || user.isAdmin())) return true;
+        if (uri.contains("/views/organizer/") && (user.isOrganizer() || user.isAdmin())) return true;
+        if (uri.contains("/views/student/")) return true; // All users can access student views
+
+        // Allow access to components
+        if (uri.contains("/components/")) return true;
+
+        // Allow access to dashboard pages
+        if (uri.endsWith("dashboard.jsp")) return true;
+
+        // System Administrator - Full access to everything
+        if (user.isSystemAdmin() || user.isAdmin()) {
+            return true;
         }
 
-        // Student areas (students and staff can access)
+        // System Admin only areas
+        if (uri.contains("/system-admin/") || uri.contains("/users/manage")) {
+            return user.canManageUsers();
+        }
+
+        // Administrator areas
+        if (uri.contains("/admin/") || uri.contains("/events/manage") ||
+            uri.contains("/attendance/") || uri.contains("/reports/events")) {
+            return user.canManageEvents() || user.isAdmin();
+        }
+
+        // Librarian areas
+        if (uri.contains("/librarian/") || uri.contains("/books/manage") ||
+            uri.contains("/borrowings/manage") || uri.contains("/reservations/manage") ||
+            uri.contains("/reports/library")) {
+            return user.canManageBooks() || user.isLibrarian() || user.isAdmin();
+        }
+
+        // Organizer areas
+        if (uri.contains("/organizer/")) {
+            return user.isOrganizer() || user.isAdmin();
+        }
+
+        // Staff areas
+        if (uri.contains("/staff/")) {
+            return user.isStaff() || user.isLibrarian() || user.isAdministrator() || user.isSystemAdmin() || user.isAdmin();
+        }
+
+        // Student areas
         if (uri.contains("/student/")) {
-            return "student".equals(userRole) || "staff".equals(userRole);
+            return true;
+        }
+
+        // Reports
+        if (uri.contains("/reports/")) {
+            return user.canViewReports() || user.isLibrarian() || user.isAdmin();
         }
 
         // Common areas accessible to all authenticated users
@@ -112,7 +161,9 @@ public class AuthFilter implements Filter {
                 uri.contains("/events") ||
                 uri.contains("/books") ||
                 uri.contains("/borrowings") ||
+                uri.contains("/reservations") ||
                 uri.endsWith("dashboard.jsp") ||
+                uri.contains("/dashboard") ||
                 uri.equals(contextPath + "/");
     }
 

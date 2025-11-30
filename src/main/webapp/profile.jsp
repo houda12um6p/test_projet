@@ -9,50 +9,51 @@
 
 <div class="container">
     <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="display-4"><i class="fas fa-user-circle me-3"></i>My Profile</h1>
-            <p class="lead text-muted">View and manage your account information</p>
-        </div>
+    <div class="mb-8">
+        <h1 style="font-size: 40px; font-weight: 800; color: var(--gray-900); margin-bottom: var(--space-3);">
+            <i class="fas fa-user-circle" style="margin-right: var(--space-3); color: var(--orange-primary);"></i>
+            My Profile
+        </h1>
+        <p style="font-size: 18px; color: var(--gray-600);">View and manage your account information</p>
     </div>
 
     <c:if test="${not empty success}">
-        <div class="alert alert-success alert-dismissible fade show">
-            <i class="fas fa-check-circle me-2"></i>${success}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>${success}</span>
         </div>
     </c:if>
 
     <c:if test="${not empty error}">
-        <div class="alert alert-danger alert-dismissible fade show">
-            <i class="fas fa-exclamation-circle me-2"></i>${error}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${error}</span>
         </div>
     </c:if>
 
-    <div class="row">
+    <div class="grid grid-cols-3 gap-6">
         <!-- Profile Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="mb-4">
-                        <i class="fas fa-user-circle fa-5x text-primary"></i>
+        <div>
+            <div class="card">
+                <div class="card-body" style="text-align: center; padding: var(--space-8);">
+                    <div style="margin-bottom: var(--space-6);">
+                        <i class="fas fa-user-circle" style="font-size: 96px; color: var(--orange-primary);"></i>
                     </div>
-                    <h4 class="card-title">${sessionScope.user.name}</h4>
-                    <p class="text-muted mb-3">${sessionScope.user.email}</p>
-                    <span class="badge bg-primary fs-6 px-3 py-2">
-                        <i class="fas ${sessionScope.user.role == 'STAFF' ? 'fa-briefcase' : 'fa-graduation-cap'} me-2"></i>
+                    <h4 style="font-size: 24px; font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-2);">${sessionScope.user.name}</h4>
+                    <p style="color: var(--gray-600); margin-bottom: var(--space-4);">${sessionScope.user.email}</p>
+                    <span class="badge badge-${sessionScope.user.role == 'STAFF' ? 'success' : 'primary'}" style="font-size: 16px; padding: var(--space-2) var(--space-4);">
+                        <i class="fas ${sessionScope.user.role == 'STAFF' ? 'fa-briefcase' : 'fa-graduation-cap'}"></i>
                         ${sessionScope.user.role}
                     </span>
 
-                    <hr class="my-4">
+                    <hr style="margin: var(--space-6) 0; border-color: var(--gray-300);">
 
-                    <div class="d-grid gap-2">
-                        <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-primary">
-                            <i class="fas fa-edit me-2"></i>Edit Profile
+                    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                        <a href="${pageContext.request.contextPath}/profile/edit" class="btn btn-primary btn-block">
+                            <i class="fas fa-edit"></i> Edit Profile
                         </a>
-                        <a href="${pageContext.request.contextPath}/profile/change-password" class="btn btn-outline-secondary">
-                            <i class="fas fa-key me-2"></i>Change Password
+                        <a href="${pageContext.request.contextPath}/profile/change-password" class="btn btn-outline-primary btn-block">
+                            <i class="fas fa-key"></i> Change Password
                         </a>
                     </div>
                 </div>
@@ -60,166 +61,153 @@
         </div>
 
         <!-- Profile Details -->
-        <div class="col-md-8 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Profile Information</h5>
+        <div style="grid-column: span 2;">
+            <div class="card" style="margin-bottom: var(--space-6);">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-size: 18px; font-weight: 700;">
+                        <i class="fas fa-info-circle" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                        Profile Information
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-4">
-                            <strong><i class="fas fa-user me-2 text-primary"></i>Full Name:</strong>
-                        </div>
-                        <div class="col-sm-8">
-                            ${sessionScope.user.name}
-                        </div>
+                    <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                        <strong style="color: var(--gray-700);">
+                            <i class="fas fa-user" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                            Full Name:
+                        </strong>
+                        <span style="color: var(--gray-900);">${sessionScope.user.name}</span>
                     </div>
-                    <hr>
-                    <div class="row mb-3">
-                        <div class="col-sm-4">
-                            <strong><i class="fas fa-envelope me-2 text-primary"></i>Email:</strong>
-                        </div>
-                        <div class="col-sm-8">
-                            ${sessionScope.user.email}
-                        </div>
+
+                    <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                        <strong style="color: var(--gray-700);">
+                            <i class="fas fa-envelope" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                            Email:
+                        </strong>
+                        <span style="color: var(--gray-900);">${sessionScope.user.email}</span>
                     </div>
-                    <hr>
-                    <div class="row mb-3">
-                        <div class="col-sm-4">
-                            <strong><i class="fas fa-user-tag me-2 text-primary"></i>Role:</strong>
-                        </div>
-                        <div class="col-sm-8">
-                            ${sessionScope.user.role}
-                        </div>
+
+                    <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4);">
+                        <strong style="color: var(--gray-700);">
+                            <i class="fas fa-user-tag" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                            Role:
+                        </strong>
+                        <span style="color: var(--gray-900);">${sessionScope.user.role}</span>
                     </div>
 
                     <c:if test="${not empty student}">
-                        <hr>
-                        <h6 class="mt-4 mb-3 text-primary">
-                            <i class="fas fa-graduation-cap me-2"></i>Student Information
+                        <hr style="margin: var(--space-6) 0;">
+                        <h6 style="font-size: 16px; font-weight: 700; color: var(--orange-primary); margin-bottom: var(--space-4);">
+                            <i class="fas fa-graduation-cap"></i> Student Information
                         </h6>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-id-card me-2 text-primary"></i>Student ID:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${student.studentIdNumber}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-id-card" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Student ID:
+                            </strong>
+                            <span style="color: var(--gray-900);">${student.studentIdNumber}</span>
                         </div>
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-book-open me-2 text-primary"></i>Major:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${student.major}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-book-open" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Major:
+                            </strong>
+                            <span style="color: var(--gray-900);">${student.major}</span>
                         </div>
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-phone me-2 text-primary"></i>Phone:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${student.phone}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-phone" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Phone:
+                            </strong>
+                            <span style="color: var(--gray-900);">${student.phone}</span>
                         </div>
                     </c:if>
 
                     <c:if test="${not empty staff}">
-                        <hr>
-                        <h6 class="mt-4 mb-3 text-primary">
-                            <i class="fas fa-briefcase me-2"></i>Staff Information
+                        <hr style="margin: var(--space-6) 0;">
+                        <h6 style="font-size: 16px; font-weight: 700; color: var(--orange-primary); margin-bottom: var(--space-4);">
+                            <i class="fas fa-briefcase"></i> Staff Information
                         </h6>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-building me-2 text-primary"></i>Department:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${staff.department}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-building" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Department:
+                            </strong>
+                            <span style="color: var(--gray-900);">${staff.department}</span>
                         </div>
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-user-tie me-2 text-primary"></i>Position:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${staff.position}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-user-tie" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Position:
+                            </strong>
+                            <span style="color: var(--gray-900);">${staff.position}</span>
                         </div>
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-map-marker-alt me-2 text-primary"></i>Office:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${staff.officeLocation}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4); margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--gray-200);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-map-marker-alt" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Office:
+                            </strong>
+                            <span style="color: var(--gray-900);">${staff.officeLocation}</span>
                         </div>
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-phone me-2 text-primary"></i>Phone:</strong>
-                            </div>
-                            <div class="col-sm-8">
-                                ${staff.phone}
-                            </div>
+
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-phone" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Phone:
+                            </strong>
+                            <span style="color: var(--gray-900);">${staff.phone}</span>
                         </div>
                     </c:if>
 
                     <c:if test="${sessionScope.user.lastLogin != null}">
-                        <hr>
-                        <div class="row mb-3">
-                            <div class="col-sm-4">
-                                <strong><i class="fas fa-clock me-2 text-primary"></i>Last Login:</strong>
-                            </div>
-                            <div class="col-sm-8">
+                        <hr style="margin: var(--space-6) 0;">
+                        <div style="display: grid; grid-template-columns: 200px 1fr; gap: var(--space-4);">
+                            <strong style="color: var(--gray-700);">
+                                <i class="fas fa-clock" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                                Last Login:
+                            </strong>
+                            <span style="color: var(--gray-900);">
                                 <fmt:formatDate value="${sessionScope.user.lastLogin}" pattern="yyyy-MM-dd HH:mm:ss" />
-                            </div>
+                            </span>
                         </div>
                     </c:if>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Account Statistics -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Account Activity</h5>
+            <!-- Account Statistics -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-size: 18px; font-weight: 700;">
+                        <i class="fas fa-chart-bar" style="color: var(--orange-primary); margin-right: var(--space-2);"></i>
+                        Account Activity
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-3">
-                            <div class="p-3">
-                                <i class="fas fa-book-reader fa-3x text-primary mb-2"></i>
-                                <h4 class="mb-0">0</h4>
-                                <small class="text-muted">Active Borrowings</small>
-                            </div>
+                    <div class="grid grid-cols-4 gap-6">
+                        <div style="text-align: center; padding: var(--space-4);">
+                            <i class="fas fa-book-reader" style="font-size: 48px; color: var(--orange-primary); margin-bottom: var(--space-3); display: block;"></i>
+                            <h4 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h4>
+                            <small style="color: var(--gray-600);">Active Borrowings</small>
                         </div>
-                        <div class="col-md-3">
-                            <div class="p-3">
-                                <i class="fas fa-history fa-3x text-success mb-2"></i>
-                                <h4 class="mb-0">0</h4>
-                                <small class="text-muted">Total Borrowed</small>
-                            </div>
+                        <div style="text-align: center; padding: var(--space-4);">
+                            <i class="fas fa-history" style="font-size: 48px; color: var(--success); margin-bottom: var(--space-3); display: block;"></i>
+                            <h4 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h4>
+                            <small style="color: var(--gray-600);">Total Borrowed</small>
                         </div>
-                        <div class="col-md-3">
-                            <div class="p-3">
-                                <i class="fas fa-calendar-check fa-3x text-info mb-2"></i>
-                                <h4 class="mb-0">0</h4>
-                                <small class="text-muted">Event Registrations</small>
-                            </div>
+                        <div style="text-align: center; padding: var(--space-4);">
+                            <i class="fas fa-calendar-check" style="font-size: 48px; color: var(--info); margin-bottom: var(--space-3); display: block;"></i>
+                            <h4 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h4>
+                            <small style="color: var(--gray-600);">Event Registrations</small>
                         </div>
-                        <div class="col-md-3">
-                            <div class="p-3">
-                                <i class="fas fa-star fa-3x text-warning mb-2"></i>
-                                <h4 class="mb-0">0</h4>
-                                <small class="text-muted">Days Member</small>
-                            </div>
+                        <div style="text-align: center; padding: var(--space-4);">
+                            <i class="fas fa-star" style="font-size: 48px; color: var(--warning); margin-bottom: var(--space-3); display: block;"></i>
+                            <h4 style="font-size: 32px; font-weight: 800; margin-bottom: var(--space-1);">0</h4>
+                            <small style="color: var(--gray-600);">Days Member</small>
                         </div>
                     </div>
                 </div>

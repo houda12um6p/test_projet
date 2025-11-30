@@ -13,7 +13,7 @@ public class User {
     private LocalDateTime lastLogin;
 
     public enum UserRole {
-        STUDENT, STAFF, ADMIN, LIBRARIAN, ADMINISTRATOR, SYSTEM_ADMIN
+        STUDENT, STAFF, ADMIN, LIBRARIAN, ORGANIZER, ADMINISTRATOR, SYSTEM_ADMIN
     }
 
     // Constructors
@@ -143,12 +143,16 @@ public class User {
         return role == UserRole.SYSTEM_ADMIN;
     }
 
+    public boolean isOrganizer() {
+        return role == UserRole.ORGANIZER;
+    }
+
     public boolean canManageBooks() {
         return role == UserRole.LIBRARIAN || role == UserRole.ADMINISTRATOR || role == UserRole.SYSTEM_ADMIN;
     }
 
     public boolean canManageEvents() {
-        return role == UserRole.ADMINISTRATOR || role == UserRole.SYSTEM_ADMIN;
+        return role == UserRole.ORGANIZER || role == UserRole.ADMINISTRATOR || role == UserRole.SYSTEM_ADMIN;
     }
 
     public boolean canManageUsers() {

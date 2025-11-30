@@ -25,7 +25,7 @@ public class UserDAO {
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getName());
-            stmt.setString(4, user.getRole().name()); // FIXED: Use enum name() instead of direct enum
+            stmt.setString(4, user.getRole().name());
             stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
             stmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
 
@@ -66,17 +66,25 @@ public class UserDAO {
 
     public User getUserByEmail(String email) {
         String sql = "SELECT * FROM " + USERS_TABLE + " WHERE email = ?";
+        System.out.println("SQL Query: " + sql);
+        System.out.println("Searching for email: " + email);
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            System.out.println("Database connection successful");
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                System.out.println("User found in database");
                 return mapResultSetToUser(rs);
+            } else {
+                System.err.println("No user found with email: " + email);
             }
         } catch (SQLException e) {
-            System.err.println("Error getting user by email " + email + ": " + e.getMessage());
+            System.err.println("SQL ERROR getting user by email " + email + ": " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -88,7 +96,7 @@ public class UserDAO {
 
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getName());
-            stmt.setString(3, user.getRole().name()); // FIXED: Use enum name() instead of direct enum
+            stmt.setString(3, user.getRole().name());
             stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             stmt.setInt(5, user.getId());
 
@@ -199,11 +207,28 @@ public class UserDAO {
     }
 
     public User validateLogin(String email, String password) {
+        System.out.println("=== LOGIN ATTEMPT ===");
+        System.out.println("Email: " + email);
+
         User user = getUserByEmail(email);
-        if (user != null && PasswordUtil.verifyPassword(password, user.getPassword())) {
+        if (user == null) {
+            System.err.println("ERROR: User not found in database for email: " + email);
+            return null;
+        }
+
+        System.out.println("User found: " + user.getName() + " (ID: " + user.getId() + ", Role: " + user.getRole() + ")");
+        System.out.println("Password hash from DB: " + user.getPassword());
+
+        boolean passwordMatch = PasswordUtil.verifyPassword(password, user.getPassword());
+        System.out.println("Password verification result: " + passwordMatch);
+
+        if (passwordMatch) {
             // Update last login timestamp
             updateLastLogin(user.getId());
+            System.out.println("Login successful for: " + email);
             return user;
+        } else {
+            System.err.println("ERROR: Password does not match for user: " + email);
         }
         return null;
     }
@@ -274,21 +299,21 @@ public class UserDAO {
         user.setPassword(rs.getString("password"));
         user.setName(rs.getString("name"));
 
-        // FIXED: Convert String to UserRole enum
+        // Convert String to UserRole enum
         String roleStr = rs.getString("role");
         if (roleStr != null) {
             user.setRole(UserRole.valueOf(roleStr.toUpperCase()));
         }
 
-        // FIXED: Convert String to LocalDateTime
-        String createdAtStr = rs.getString("created_at");
-        if (createdAtStr != null) {
-            user.setCreatedAt(LocalDateTime.parse(createdAtStr.replace(" ", "T")));
+        // Convert Timestamp to LocalDateTime
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            user.setCreatedAt(createdAt.toLocalDateTime());
         }
 
-        String updatedAtStr = rs.getString("updated_at");
-        if (updatedAtStr != null) {
-            user.setUpdatedAt(LocalDateTime.parse(updatedAtStr.replace(" ", "T")));
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        if (updatedAt != null) {
+            user.setUpdatedAt(updatedAt.toLocalDateTime());
         }
 
         // Handle last login if exists

@@ -27,13 +27,17 @@ public class RoleFilter implements Filter {
 
         if (session != null) {
             User user = (User) session.getAttribute("user");
-            if (user != null && "staff".equals(user.getRole())) {
-                chain.doFilter(request, response);
-                return;
+            if (user != null) {
+                // Allow access if user is any type of staff (Staff, Librarian, Administrator, System Admin)
+                if (user.isStaff() || user.isLibrarian() || user.isAdministrator() || user.isSystemAdmin()) {
+                    chain.doFilter(request, response);
+                    return;
+                }
             }
         }
 
-        httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Staff access required");
+        httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN,
+                "Access Denied - Staff privileges required");
     }
 
     @Override

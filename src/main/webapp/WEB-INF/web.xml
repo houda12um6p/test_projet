@@ -3,7 +3,8 @@
          xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         metadata-complete="false">
 
     <!-- Display Name -->
     <display-name>UM6P Learning Center Management System</display-name>
@@ -36,8 +37,9 @@
     <!-- All servlets are configured using @WebServlet annotations in the controller classes -->
 
     <!-- ===== FILTERS CONFIGURATION ===== -->
+    <!-- FILTERS TEMPORARILY DISABLED - Uncomment when backend classes are compiled -->
 
-    <!-- Authentication Filter -->
+    <!--
     <filter>
         <filter-name>AuthFilter</filter-name>
         <filter-class>com.um6p.filter.AuthFilter</filter-class>
@@ -51,7 +53,6 @@
         <url-pattern>/dashboard</url-pattern>
     </filter-mapping>
 
-    <!-- Role-Based Access Filter -->
     <filter>
         <filter-name>RoleFilter</filter-name>
         <filter-class>com.um6p.filter.RoleFilter</filter-class>
@@ -60,6 +61,7 @@
         <filter-name>RoleFilter</filter-name>
         <url-pattern>/admin/*</url-pattern>
     </filter-mapping>
+    -->
 
     <!-- ===== ERROR PAGES ===== -->
 

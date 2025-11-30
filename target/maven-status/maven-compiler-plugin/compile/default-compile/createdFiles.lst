@@ -1,3 +1,4 @@
+com\um6p\util\EmailService$1.class
 com\um6p\model\Borrowing$BorrowingStatus.class
 com\um6p\model\Registration$RegistrationStatus.class
 com\um6p\model\Student.class
@@ -7,6 +8,8 @@ com\um6p\model\User.class
 com\um6p\controller\EventController.class
 com\um6p\dao\UserDAO.class
 com\um6p\Main.class
+com\um6p\util\InsertTestUsers.class
+com\um6p\servlet\FixPasswordsServlet.class
 com\um6p\dao\EventDAO.class
 com\um6p\dao\LibrarianDAO.class
 com\um6p\model\Reservation.class
@@ -22,9 +25,12 @@ com\um6p\model\Staff.class
 com\um6p\controller\LogoutController.class
 com\um6p\dao\StaffDAO.class
 com\um6p\util\PasswordUtil.class
+com\um6p\util\EmailService.class
 com\um6p\dao\RegistrationDAO.class
 com\um6p\dao\StudentDAO.class
 com\um6p\model\Book.class
+com\um6p\servlet\SetupUsersServlet.class
+com\um6p\util\GeneratePasswordHash.class
 com\um6p\model\Borrowing.class
 com\um6p\controller\BookController.class
 com\um6p\model\Event.class

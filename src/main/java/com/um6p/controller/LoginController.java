@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
         }
 
         // Redirect to login page
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/public/login.jsp").forward(request, response);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class LoginController extends HttpServlet {
         // Validate input
         if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Please enter both email and password.");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/public/login.jsp").forward(request, response);
             return;
         }
 
@@ -59,7 +59,7 @@ public class LoginController extends HttpServlet {
         if (!email.endsWith("@um6p.ma")) {
             request.setAttribute("error", "Only UM6P email addresses (@um6p.ma) are allowed.");
             request.setAttribute("email", email); // Preserve entered email
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/public/login.jsp").forward(request, response);
             return;
         }
 
@@ -71,9 +71,9 @@ public class LoginController extends HttpServlet {
             loginAttempts = 0;
         }
 
-        if (loginAttempts >= 5) {
+        if (loginAttempts >= 100) {
             request.setAttribute("error", "Too many login attempts. Please try again later.");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/public/login.jsp").forward(request, response);
             return;
         }
 
@@ -100,7 +100,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("loginAttempts", loginAttempts + 1);
             request.setAttribute("error", "Invalid email or password. Please try again.");
             request.setAttribute("email", email); // Preserve entered email
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/public/login.jsp").forward(request, response);
         }
     }
 }
